@@ -1,8 +1,16 @@
 %%% File: usr.hrl
 %%% Description: Include file for user db
 
--record(usr, {msisdn,
-              id,
-              status = enabled,
-              plan,
-              services = []}).
+-type(plan()    :: prepay | postpay).
+-type(status()  :: enabled | disabled).
+-type(service() :: atom()).
+
+-record(usr, 
+  {
+    msisdn              ::integer(),
+    id                  ::integer(),
+    status = enabled    ::status(),
+    plan                ::plan(),
+    services = []       ::[service()]
+  }
+).

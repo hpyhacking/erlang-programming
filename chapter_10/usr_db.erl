@@ -3,10 +3,13 @@
 
 -module(usr_db).
 -include("usr.hrl").
+
 -export([create_tables/1, close_tables/0]).
 -export([add_usr/1, update_usr/1]).
 -export([lookup_id/1, lookup_msisdn/1]).
 -export([restore_backup/0]).
+
+-export([delete_disabled/0, delete_usr/2]).
 
 create_tables(FileName) ->
   ets:new(usrRam, [named_table, {keypos, #usr.msisdn}]),
@@ -59,12 +62,25 @@ delete_disabled() ->
   ets:safe_fixtable(usrRam, false),
   ok.
 
+delete_usr(PhoneNo, CustId) ->
+  ets:safe_fixtable(usrRam, true),
+  ets:delete(usrRam, PhoneNo),
+  ets:safe_fixtable(usrRam, false),
+
+  ets:safe_fixtable(usrIndex, true),
+  ets:delete(usrIndex, CustId),
+  ets:safe_fixtable(usrIndex, false),
+
+  dets:delete(usrRam, PhoneNo),
+  ok.
+  
+
 loop_delete_disabled('$end_of_table') ->
   ok;
 
 loop_delete_disabled(PhoneNo) ->
   case ets:lookup(usrRam, PhoneNo) of
-    [usr{status=disabled, id=CustId}] ->
+    [#usr{status=disabled, id=CustId}] ->
       delete_usr(PhoneNo, CustId);
     _ ->
       ok
