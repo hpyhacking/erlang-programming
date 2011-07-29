@@ -9,7 +9,7 @@
 -export([lookup_id/1, lookup_msisdn/1]).
 -export([restore_backup/0]).
 
--export([delete_disabled/0, delete_usr/2]).
+-export([delete_disabled/0, delete_usr/1]).
 
 create_tables(FileName) ->
   ets:new(usrRam, [named_table, {keypos, #usr.msisdn}]),
@@ -62,26 +62,27 @@ delete_disabled() ->
   ets:safe_fixtable(usrRam, false),
   ok.
 
-delete_usr(PhoneNo, CustId) ->
-  ets:safe_fixtable(usrRam, true),
-  ets:delete(usrRam, PhoneNo),
-  ets:safe_fixtable(usrRam, false),
+delete_usr(CustId) ->
+  case get_index(CustId) of
+    {ok, PhoneNo} -> 
+      ets:safe_fixtable(usrRam, true),
+      ets:delete(usrRam, PhoneNo),
+      ets:safe_fixtable(usrRam, false),
+      ets:safe_fixtable(usrIndex, true),
+      ets:delete(usrIndex, CustId),
+      ets:safe_fixtable(usrIndex, false),
 
-  ets:safe_fixtable(usrIndex, true),
-  ets:delete(usrIndex, CustId),
-  ets:safe_fixtable(usrIndex, false),
-
-  dets:delete(usrRam, PhoneNo),
-  ok.
+      dets:delete(usrDisk, PhoneNo);
+    {error, instance} -> {error, instance}
+  end.
   
-
 loop_delete_disabled('$end_of_table') ->
   ok;
 
 loop_delete_disabled(PhoneNo) ->
   case ets:lookup(usrRam, PhoneNo) of
     [#usr{status=disabled, id=CustId}] ->
-      delete_usr(PhoneNo, CustId);
+      delete_usr(CustId);
     _ ->
       ok
   end,
