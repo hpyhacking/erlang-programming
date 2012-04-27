@@ -2,6 +2,45 @@ OpenPoker is released under a dual GPL/commercial license.
 
 Please see doc/install.txt for installation instructions and visit http://groups.google.com/group/openpoker if you have questions.
 
+src/betting 赌注状态机(cardgame)
+src/bits 
+src/blinds 盲注状态机(cardgame)
+src/bot 机器人
+src/cardgame 纸牌游戏状态机宿主(gen_fsm)
+src/common.hrl 公共Header定义(header)
+src/counter 累加器(lib)
+src/db 数据库相关(gen_server)
+src/deal_cards 发牌状态机(cardgame)
+src/deck 扑克牌(gen_server)
+src/delayed_start 延迟游戏启动状态机(cardgame)
+src/fixed_limit 
+src/game
+src/gateway
+src/hand 手牌(gen_server)
+src/id
+src/ircdb 聊天室
+src/ircdb.hrl 聊天室定义
+src/lang 语言文字定义(lib)
+src/lang.hrl
+src/login 登陆(lib)
+src/monitor 
+src/multibot
+src/observer
+src/player 玩家(gen_server)
+src/pot
+src/proto 协议(lib)
+src/proto.hrl 协议定义(header)
+src/schema 数据库结构(lib)
+src/schema.hrl 结构定义(header)
+src/server 游戏服务器(gen_server)
+src/showdown 游戏结束状态机(cardgame)
+src/tcp_server 网络通信服务器(gen_server)
+src/test
+src/test
+src/texas 德州扑克
+src/util 
+src/visitor 访问者(gen_server)
+
 More information can also be found at http://wagerlabs.com.
 
 	Thanks, Joel Reymont

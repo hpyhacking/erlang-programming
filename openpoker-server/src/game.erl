@@ -540,7 +540,7 @@ create_seats(Seats, I) ->
       bet = 0,
       hand = Hand,
       state = ?PS_EMPTY
-     },
+    },
     NewSeats = setelement(I, Seats, Seat),
     create_seats(NewSeats, I - 1).
 

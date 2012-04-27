@@ -1,4 +1,4 @@
--module(sample_gensrv).
+-module(gensrv).
 -export([start/0, stop/0]).
 -export([init/1, handle_cast/2, handle_call/3, terminate/2]).
 -export([say_hello/1]).
@@ -7,7 +7,7 @@
 
 start() ->
   Name = "Jack",
-  gen_server:start({local, ?MODULE}, ?MODULE, Name, []).
+  gen_server:start({global, {test, ?MODULE}}, ?MODULE, Name, []).
 
 init(Name) ->
   io:format("Init OPT ~p~n", [Name]),
